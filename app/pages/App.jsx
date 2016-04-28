@@ -6,44 +6,18 @@ import AreaGraph from '../components/AreaGraph.jsx';
 import SpreadGraph from '../components/SpreadGraph.jsx';
 import { tickAction } from '../stores/actions.jsx';
 
-const mapStateToProps_cores = (state) => {
-  return {
-    data: [
-      state.summary.map( (o) => { return { x: parseInt(o.timestamp), y:parseInt(o.cores) }; } )
-    ]
-  }
-}
+const makeStateToPropsDiffY = (...ys) => (state) => ({
+    data: ys.map(
+      (y) => state.summary.map(
+        (o) => ({ x: parseInt(o.timestamp), y: parseInt(o[y]) })
+      )
+    )
+})
 
-const mapStateToProps_mem = (state) => {
-  return {
-    data: [
-      state.summary.map( (o) => { return { x: parseInt(o.timestamp), y:parseInt(o.mem) }; } ),
-      state.summary.map( (o) => { return { x: parseInt(o.timestamp), y:parseInt(o.mem_reservation) }; } )
-    ]
-  }
-}
-
-const mapStateToProps_jobs = (state) => {
-  return {
-    data: [
-      state.summary.map( (o) => { return { x: parseInt(o.timestamp), y:parseInt(o.pending_jobs) }; } ),
-      state.summary.map( (o) => { return { x: parseInt(o.timestamp), y:parseInt(o.running_jobs) }; } )
-    ]
-  }
-}
-
-const mapStateToProps_wait = (state) => {
-  return {
-    data: [
-      state.summary.map( (o) => { return { x: parseInt(o.timestamp), y:parseInt(o.pending_time_avg) }; } )
-    ]
-  }
-}
-
-const CoreLineGraph = connect(mapStateToProps_cores, {})(LineGraph)
-const MemLineGraph = connect(mapStateToProps_mem, {})(LineGraph)
-const JobsAreaGraph = connect(mapStateToProps_mem, {})(AreaGraph)
-const WaitLineGraph = connect(mapStateToProps_wait, {})(LineGraph)
+const CoreLineGraph = connect(makeStateToPropsDiffY("cores"), {})(LineGraph)
+const MemLineGraph = connect(makeStateToPropsDiffY("mem", "mem_reservation"), {})(LineGraph)
+const JobsAreaGraph = connect(makeStateToPropsDiffY("pending_jobs", "running_jobs"), {})(AreaGraph)
+const WaitLineGraph = connect(makeStateToPropsDiffY("pending_time_avg"), {})(LineGraph)
 
 export default class App extends Component {
 
