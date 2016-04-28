@@ -1,24 +1,32 @@
-import superagent from 'superagent';
+import axios from 'axios';
 
 const path = 'https://live.hpc.mssm.edu'
 
+
+//axios
 export function getSummary(callback) {
-  superagent
-    .get( path + '/jobstable2json.php?type=summary' )
-    .on( 'error', (res) => { console.log(res); } )
-    .end( callback );
+  return axios.get( path + '/jobstable2json.php?type=summary' )
+    .then( (res) => {
+        if (res.status >= 400) { throw new Error("fetch error"); }
+        console.log(res);
+        return res.data;
+    } );
 }
 
-export function getUsers(callback) {
-  superagent
-    .get( path + '/jobstable2json.php?type=xpery&field=user&dictionary=true&sort=cores' )
-    .on( 'error', (res) => { console.log(res); } )
-    .end( callback );
+export function getUsersTable(callback) {
+  return axios.get( path + '/jobstable2json.php?type=xpery&field=user&dictionary=true&sort=cores' )
+    .then( (res) => {
+        if (res.status >= 400) { throw new Error("fetch error"); }
+        console.log(res);
+        return res.data;
+    } );
 }
 
-export function getProjects(callback) {
-  superagent
-    .get( path + '/jobstable2json.php?type=xpery&field=project_name&dictionary=true&sort=cores' )
-    .on( 'error', (res) => { console.log(res); } )
-    .end( callback );
+export function getProjectsTable(callback) {
+  return axios.get( path + '/jobstable2json.php?type=xpery&field=project_name&dictionary=true&sort=cores' )
+    .then( (res) => {
+        if (res.status >= 400) { throw new Error("fetch error"); }
+        console.log(res);
+        return res.data;
+    } );
 }
