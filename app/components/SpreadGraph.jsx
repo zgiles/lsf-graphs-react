@@ -3,9 +3,6 @@ import Highchart from './Highchart.jsx';
 import Highcharts from 'highcharts';
 
 let SpreadGraph = ({ data, colors, title, subtitle, yaxistitle }) => {
-    let series = data.map(function(d) {
-      return { data: d };
-    })
     let config = {
       colors: colors || ['#CC0000', '#996600', '#FFCC00', '#3333FF'],
       chart: {
@@ -20,7 +17,7 @@ let SpreadGraph = ({ data, colors, title, subtitle, yaxistitle }) => {
       subtitle: {
           text: subtitle || "no title"
       },
-      series: series,
+      series: data,
       xAxis: {
 				categories: [''],
 				gridLineColor: 'transparent',

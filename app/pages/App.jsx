@@ -14,10 +14,16 @@ const makeStateToPropsDiffY = (...ys) => (state) => ({
     )
 })
 
+const makeStateToPropsUserSpread = (state) => ({
+    data: state.users.map( (u) => ({ name: u.longname.substring(0, 13) + '...', data: [ parseInt(u.cores) ] }) )
+})
+
 const CoreLineGraph = connect(makeStateToPropsDiffY("cores"), {})(LineGraph)
 const MemLineGraph = connect(makeStateToPropsDiffY("mem", "mem_reservation"), {})(LineGraph)
 const JobsAreaGraph = connect(makeStateToPropsDiffY("pending_jobs", "running_jobs"), {})(AreaGraph)
 const WaitLineGraph = connect(makeStateToPropsDiffY("pending_time_avg"), {})(LineGraph)
+const UserSpreadGraph = connect(makeStateToPropsUserSpread, {})(SpreadGraph)
+
 
 export default class App extends Component {
 
@@ -66,8 +72,7 @@ export default class App extends Component {
             yaxistitle="hours" />
         </div>
         <div className="col-md-6">
-          <SpreadGraph
-            data={ [ [ 1,2,3,4 ] ] }
+          <UserSpreadGraph
             title="User Spread"
             subtitle="relative core usage by user" />
 
