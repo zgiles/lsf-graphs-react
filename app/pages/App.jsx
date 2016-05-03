@@ -4,26 +4,40 @@ import { connect } from 'react-redux'
 import LineGraph from '../components/LineGraph.jsx';
 import AreaGraph from '../components/AreaGraph.jsx';
 import SpreadGraph from '../components/SpreadGraph.jsx';
+import TableCores from '../components/TableCores.jsx';
 import { tickAction } from '../stores/actions.jsx';
 
-const makeStateToPropsDiffY = (...ys) => (state) => ({
+const makeStateToPropsDiffY = (...ys) => state => ({
     data: ys.map(
-      (y) => state.summary.map(
-        (o) => ({ x: parseInt(o.timestamp), y: parseInt(o[y]) })
+      y => state.summary.map(
+        o => ({ x: parseInt(o.timestamp), y: parseInt(o[y]) })
       )
     )
 })
 
+/*
 const makeStateToPropsUserSpread = (state) => ({
-    data: state.users.map( (u) => ({ name: u.longname.substring(0, 13) + '...', data: [ parseInt(u.cores) ] }) )
+    data: state.users.map( u => ({ name: u.longname.substring(0, 13) + '...', data: [ parseInt(u.cores) ] }) )
 })
+*/
+
+const makeStateToPropsUserSpread = (state) => ({
+    data: Object.keys(state.users).map( u => ({ name: state.users[u].longname.substring(0, 13) + '...', data: [ parseInt(state.users[u].cores) ] }) )
+})
+
+/*
+const makeStateToPropsPASS = (state) => ({ data: state.users })
+*/
+
+const makedicttoArray =  (d) => (state) => ({ data: Object.keys(state[d]).map( u => state[d][u] ) })
 
 const CoreLineGraph = connect(makeStateToPropsDiffY("cores"), {})(LineGraph)
 const MemLineGraph = connect(makeStateToPropsDiffY("mem", "mem_reservation"), {})(LineGraph)
 const JobsAreaGraph = connect(makeStateToPropsDiffY("pending_jobs", "running_jobs"), {})(AreaGraph)
 const WaitLineGraph = connect(makeStateToPropsDiffY("pending_time_avg"), {})(LineGraph)
 const UserSpreadGraph = connect(makeStateToPropsUserSpread, {})(SpreadGraph)
-
+const UserTableCores = connect(makedicttoArray("users"),{})(TableCores)
+const ProjectTableCores = connect(makedicttoArray("projects"),{})(TableCores)
 
 export default class App extends Component {
 
@@ -77,20 +91,14 @@ export default class App extends Component {
             subtitle="relative core usage by user" />
 
           <div id="topcorestablecontainer" className="table-containers">
-          	<table id='topcorestable' className="table table-condensed">
-          		<caption className="text-center"><h4>Top Minerva Users Running</h4></caption>
-          		<thead><tr><th className="col-md-1">Rank</th><th>User</th><th className="col-md-1">Cores</th><th className="col-md-1"></th></tr></thead>
-          		<tbody>
-          		</tbody>
-          	</table>
+            <UserTableCores
+              title="Top Minerva Users Running"
+              subject="User" />
           </div>
           <div id="topprojectstablecontainer" className="table-containers">
-          	<table id='topprojectstable' className="table table-condensed">
-          		<caption className="text-center"><h4>Top Minerva Projects Running</h4></caption>
-          		<thead><tr><th className="col-md-1">Rank</th><th>Project</th><th class="col-md-1">Cores</th><th className="col-md-1"></th></tr></thead>
-          		<tbody>
-          		</tbody>
-          	</table>
+            <ProjectTableCores
+              title="Top Minerva Projects Running"
+              subject="Project" />
           </div>
         </div>
       </div>
