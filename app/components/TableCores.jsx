@@ -2,16 +2,14 @@ import React, {PropTypes} from 'react';
 
 let TableCores = ({ data, title, subject }) => {
 
-  console.log(data);
-
   function arrow(n) {
     if(n > 0) {
-      return [ (<i className="fa fa-arrow-up" style={{ color: 'green' }}></i>), n ];
+      return [ (<i key={n} className="fa fa-arrow-up" style={{ color: 'green' }}></i>), n ];
     } else {
       if(n < 0) {
-        return [ (<i className="fa fa-arrow-down" style={{ color: 'red' }}></i>), n ];
+        return [ (<i key={n} className="fa fa-arrow-down" style={{ color: 'red' }}></i>), n ];
       } else {
-        return [ (<i style={{ color: 'orange' }}>{ '\u2014' }</i>) ];
+        return [ (<i key={n} style={{ color: 'orange' }}>{ '\u2014' }</i>) ];
       }
     }
   }
@@ -20,7 +18,7 @@ let TableCores = ({ data, title, subject }) => {
   function rows(n) {
     let x = [];
     for (let i = 0; i < ( n < data.length ? n : data.length ) ; i++) {
-      x.push( <tr><th scope="row">{i+1}</th><td>{data[i].longname}</td><td>{data[i].cores}</td><td>{ arrow(data[i].diff) }</td></tr> );
+      x.push( <tr key={i}><th scope="row">{i+1}</th><td>{data[i].longname}</td><td>{data[i].cores}</td><td>{ arrow(data[i].diff) }</td></tr> );
     }
     return x;
   }

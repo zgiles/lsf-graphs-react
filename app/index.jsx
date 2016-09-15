@@ -8,9 +8,13 @@ import { createStore, applyMiddleware } from 'redux'
 import App from './pages/App';
 import { reducer } from './stores/reducer.jsx';
 
-const loggerMiddleware = createLogger();
+// Enable logging
+// const loggerMiddleware = createLogger();
+// const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
+// Disable Logging
+const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+
 const ConnectedApp = connect()(App)
 
 render(
