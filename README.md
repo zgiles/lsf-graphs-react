@@ -1,4 +1,6 @@
-lsf-graphs-react
+# lsf-graphs-react
+React.JS and Highcharts to display live cluster usage.
+
 ---
 
 This is the follow-on code to lsf-graphs. It's a complete rewrite using React and Highcharts, including a react-highcharts adapter, redux, and an API util (component).
