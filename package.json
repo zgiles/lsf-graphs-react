@@ -1,7 +1,8 @@
 {
-  "name": "react15-webpack-seed",
-  "version": "1.0.0",
+  "name": "lsf-graphs-react",
+  "version": "0.2.0",
   "license": "MIT",
+  "author": "Zachary Giles <zgiles@gmail.com>"
   "dependencies": {
     "axios": "^0.14.0",
     "highcharts": "^4.2.6",
